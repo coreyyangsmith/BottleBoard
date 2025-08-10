@@ -235,9 +235,17 @@ export default function StorageManagement() {
           }
         }}
       >
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-screen-2xl w-[98vw]">
           <DialogHeader>
-            <DialogTitle>Manage Storage - {selectedStorage?.name}</DialogTitle>
+            <DialogTitle>Manage Storage — {selectedStorage?.name}</DialogTitle>
+            {selectedStorage && (
+              <DialogDescription>
+                <span className="mr-3">Dimensions: {selectedStorage.width} × {selectedStorage.height}</span>
+                <span className="mr-3">Capacity: {selectedStorage.capacity}</span>
+                <span className="mr-3">Occupied: {selectedStorage.wines.length}</span>
+                <span>Available: {selectedStorage.capacity - selectedStorage.wines.length}</span>
+              </DialogDescription>
+            )}
           </DialogHeader>
           {selectedStorage && (
             <StorageGrid storage={selectedStorage} wines={wines} onAddWine={addWineToStorage} onRemoveWine={removeWineFromStorage} />
@@ -470,10 +478,18 @@ function StorageGrid({
         <div className="text-sm text-gray-600">{selectedWine ? 'Click empty slot to place wine' : 'Click occupied slot to remove wine'}</div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
-          <div className="border rounded-lg p-4 bg-gray-50">
-            <div className="grid gap-1 mx-auto" style={{ gridTemplateColumns: `repeat(${storage.width}, 1fr)`, maxWidth: `${storage.width * 40}px` }}>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2">
+          <div className="rounded-xl border bg-white p-4">
+            <div
+              className="grid mx-auto"
+              style={{
+                gridTemplateColumns: `repeat(${storage.width}, 1fr)`,
+                gap: '6px',
+                width: '100%',
+                maxWidth: `${Math.min(storage.width * 56, 960)}px`,
+              }}
+            >
               {Array.from({ length: storage.height }, (_, y) =>
                 Array.from({ length: storage.width }, (_, x) => {
                   const wine = getWineAtPosition(x, y)
@@ -492,7 +508,7 @@ function StorageGrid({
                   return (
                     <div
                       key={`${x}-${y}`}
-                      className={`w-8 h-8 border rounded cursor-pointer flex items-center justify-center text-xs transition-colors ${classes}`}
+                      className={`aspect-square border rounded-md cursor-pointer flex items-center justify-center text-[10px] transition-colors ${classes}`}
                       style={style}
                       onClick={() => handlePositionClick(x, y)}
                       title={tooltip}
@@ -504,7 +520,7 @@ function StorageGrid({
               )}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 text-sm mt-3">
+          <div className="grid grid-cols-2 gap-6 text-sm mt-4">
             <div>
               <strong>Legend:</strong>
               <div className="mt-2 space-y-1">
@@ -524,7 +540,7 @@ function StorageGrid({
           </div>
         </div>
         <div className="space-y-4">
-          <div className="border rounded-lg p-4">
+          <div className="rounded-xl border bg-white p-4">
             <div className="font-medium text-sm mb-2">Bottle counts by type</div>
             {typeEntries.length === 0 ? (
               <div className="text-sm text-gray-500">No bottles placed</div>
@@ -536,7 +552,7 @@ function StorageGrid({
               </div>
             )}
           </div>
-          <div className="border rounded-lg p-4 max-h-64 overflow-y-auto">
+          <div className="rounded-xl border bg-white p-4 max-h-64 overflow-y-auto">
             <div className="font-medium text-sm mb-2">Placed Wines</div>
             {storage.wines.length === 0 ? (
               <div className="text-sm text-gray-500">No wines placed in this storage</div>
@@ -545,9 +561,12 @@ function StorageGrid({
                 {storage.wines.map((winePos, index) => {
                   const wineData = wineById.get(winePos.wineId)
                   return (
-                    <div key={index} className="text-sm p-2 bg-gray-50 rounded border">
-                      <div className="font-medium">{winePos.wineName}</div>
-                      <div className="text-gray-600">({winePos.x + 1}, {winePos.y + 1}) • {wineData?.brand ?? ''} {wineData?.vintage ?? ''}</div>
+                    <div key={index} className="text-sm p-2 bg-gray-50 rounded border grid grid-cols-[1fr_auto] gap-1">
+                      <div>
+                        <div className="font-medium leading-tight">{winePos.wineName}</div>
+                        <div className="text-gray-600 leading-tight">({winePos.x + 1}, {winePos.y + 1}) • {wineData?.brand ?? ''} {wineData?.vintage ?? ''}</div>
+                      </div>
+                      <div className="text-xs text-gray-500 self-center">{wineData?.type ?? ''}</div>
                     </div>
                   )
                 })}

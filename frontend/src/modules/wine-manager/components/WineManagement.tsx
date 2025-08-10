@@ -303,6 +303,7 @@ function WineForm({
       bottleColor: '#722F37',
       bottleShape: 'standard' as BottleShape,
       labelColor: '#FFFFFF',
+      labelWrapFraction: 1/3,
     },
   })
 
@@ -482,6 +483,20 @@ function WineForm({
               value={formData.visualStyle.labelColor}
               onChange={(e) => setFormData({ ...formData, visualStyle: { ...formData.visualStyle, labelColor: e.target.value } })}
             />
+          </div>
+          <div>
+            <Label htmlFor="labelWrap">Label Wrap (0.1 - 1.0)</Label>
+            <input
+              id="labelWrap"
+              type="range"
+              min={0.1}
+              max={1}
+              step={0.05}
+              value={formData.visualStyle.labelWrapFraction ?? 1/3}
+              onChange={(e) => setFormData({ ...formData, visualStyle: { ...formData.visualStyle, labelWrapFraction: parseFloat(e.target.value) } })}
+              className="w-full"
+            />
+            <div className="text-xs text-gray-500 mt-1">{((formData.visualStyle.labelWrapFraction ?? 1/3) * 100).toFixed(0)}% circumference</div>
           </div>
         </div>
       </div>

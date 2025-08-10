@@ -11,7 +11,7 @@ function dataApiPlugin() {
     name: "cellar-data-api",
     configureServer(server: ViteDevServer) {
       const DATA_DIR = path.resolve(__dirname, "data")
-      const DATA_FILE = path.resolve(DATA_DIR, "celler-data.json")
+      const DATA_FILE = path.resolve(DATA_DIR, "cellar-data.json")
 
       async function ensureFile() {
         try {

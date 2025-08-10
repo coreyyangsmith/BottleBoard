@@ -4,6 +4,8 @@ export interface WineVisualStyle {
   bottleColor: string
   bottleShape: BottleShape
   labelColor: string
+  /** Fraction of the bottle circumference covered by the label (0-1). Default ~0.33 */
+  labelWrapFraction?: number
 }
 
 export interface Wine {

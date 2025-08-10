@@ -824,7 +824,14 @@ function WineBottle({ position, wine, winePos }: { position: [number, number, nu
 
       {labelTexture && (
         <mesh position={[0, 0, 0]}>
-          <cylinderGeometry args={[0.058, 0.058, 0.15, 16]} />
+          {(() => {
+            const wrap = Math.max(0.01, Math.min(1, wine?.visualStyle?.labelWrapFraction ?? 1 / 3))
+            const thetaLength = 2 * Math.PI * wrap
+            const thetaStart = Math.PI / 2 - thetaLength / 2
+            return (
+              <cylinderGeometry args={[0.058, 0.058, 0.15, 32, 1, false, thetaStart, thetaLength]} />
+            )
+          })()}
           <meshStandardMaterial map={labelTexture} transparent opacity={0.9} />
         </mesh>
       )}
@@ -960,7 +967,14 @@ function GalleryWineBottle({ wine }: { wine: Wine }) {
 
       {labelTexture && (
         <mesh position={[0, 0, 0]}>
-          <cylinderGeometry args={[0.29, 0.29, 0.4, 16]} />
+          {(() => {
+            const wrap = Math.max(0.01, Math.min(1, wine?.visualStyle?.labelWrapFraction ?? 1 / 3))
+            const thetaLength = 2 * Math.PI * wrap
+            const thetaStart = Math.PI / 2 - thetaLength / 2
+            return (
+              <cylinderGeometry args={[0.29, 0.29, 0.4, 48, 1, false, thetaStart, thetaLength]} />
+            )
+          })()}
           <meshStandardMaterial map={labelTexture} transparent opacity={0.9} />
         </mesh>
       )}
